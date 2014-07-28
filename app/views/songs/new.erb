@@ -1,0 +1,33 @@
+<h1>Share a Song</h1>
+<hr/>
+
+<% if @song.errors.any? %>
+  <div>
+    <strong>Some issues with your message, please fix them:</strong>
+    <ul>
+      <% @song.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<form method="post" action="/songs">
+  <div>
+    <label>Song Title:</label>
+    <input type="text" name="song_title" value="<%= @song.song_title %>">
+  </div>
+
+    <label>Author:</label>
+    <input type="text" name="author" value="<%= @song.author %>">
+  </div>
+  <div>
+    <label>URL: (Optional)</label>
+    <input type="text" name="url" value="<%= @song.url %>">
+  </div>
+  <div>
+
+  <div>
+    <input type="submit" value="Submit" >
+  </div>
+</form>

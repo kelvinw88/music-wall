@@ -1,0 +1,16 @@
+<h1>Song Wall</h1>
+
+<% @songs.each do |song| %>
+  <div class="song">
+    <h3><%=song.song_title%><small> (by:<%=song.author%>)</small></h3>
+    <p>
+      <% unless song.url.empty? %>
+      <a href="<%= song.url %>">Link to Song</a>
+      <% end %>
+    </p>
+  </div>
+<% end %>
+
+<hr/>
+
+<a href="/songs/new">Share a song on the song wall</a>

@@ -28,8 +28,8 @@ end
 get '/songs' do
 
   @vote_history = VoteHistory.all
-  @songs = Song.all
-  @songs = @songs.order('song.vote_histories.count DESC')
+  @songs = Song.all.sort_by{|song| song.vote_histories.count}.reverse
+
   erb :'songs/index'
 end
 

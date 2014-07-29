@@ -1,16 +1,22 @@
 <h1>Song Wall</h1>
 
-<h2>User: <%= @username %>
+<h2>User: <%= username %>
+  <br/>
+
 <% @songs.each do |song| %>
+
   <div class="song">
+    <p><a href="/songs/<%=song.id%>/upvote">UP VOTE</a> <%= song.vote_histories.count%> </p>
     <h3><%=song.song_title%><small> (by:<%=song.author%>)</small></h3>
     <% unless song.url.empty? %>
       <p>
       <a href="<%= song.url %>">Link to Song</a>
       </p>
+
     <% end %>
-    <p> Created at: <%= song.created_at %></p>
+    <p> Created at: <%= song.created_at %> by <%= get_user_name(song.user_id) %> </p>
   </div>
+  <hr/>
 <% end %>
 
 <hr/>

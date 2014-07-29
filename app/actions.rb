@@ -13,6 +13,12 @@ helpers do
     return session[:name]
   end
 
+  def get_user_name(id)
+    user = User.find_by(id: id)
+    user.name if user
+  end
+
+
 end
 
 get '/' do
@@ -20,7 +26,10 @@ get '/' do
 end
 
 get '/songs' do
+
+  @vote_history = VoteHistory.all
   @songs = Song.all
+  @songs = @songs.order('song.vote_histories.count DESC')
   erb :'songs/index'
 end
 
@@ -57,7 +66,7 @@ post '/songs' do
   if @song.save
     @song.user_id = session[:id]
     @song.save
-    binding.pry
+
     redirect '/songs'
   else
     erb :'songs/new'
@@ -66,7 +75,6 @@ end
 
 
 get '/login' do
-
   erb :'login'
 end
 
@@ -75,10 +83,9 @@ post '/login_check' do
   password = params[:password]
   user = User.where(email: email).where(password: password)[0]
     if user
-
       session[:name] = user.name
       session[:id] = user.id
-      binding.pry
+
       redirect '/songs'
     else
       erb :'login'
@@ -88,5 +95,17 @@ end
 get '/logout' do
   session[:name] = nil
   erb :index
+end
 
+get '/songs/:id/upvote' do
+
+  @song = Song.find params[:id]
+
+  unless VoteHistory.find_by(user_id: session[:id],song_id: @song.id)
+    @vote_history = VoteHistory.new(user_id: session[:id] ,song_id: @song.id)
+    @vote_history.save
+
+  end
+
+  redirect '/songs'
 end

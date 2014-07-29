@@ -26,31 +26,10 @@ get '/' do
 end
 
 get '/songs' do
-
   @vote_history = VoteHistory.all
   @songs = Song.all.sort_by{|song| song.vote_histories.count}.reverse
-
   erb :'songs/index'
 end
-
-get '/users/new' do
-  @user = User.new
-  erb :'users/new'
-end
-
-post '/users' do
-  @user = User.new(
-  name: params[:name],
-  email: params[:email],
-  password: params[:password],
-  )
-  if @user.save
-    redirect "/songs"
-  else
-    erb :'users/new'
-  end
-end
-
 
 get '/songs/new' do
   @song = Song.new
@@ -73,6 +52,32 @@ post '/songs' do
   end
 end
 
+get '/songs/:id/upvote' do
+  @song = Song.find params[:id]
+  unless VoteHistory.find_by(user_id: session[:id],song_id: @song.id)
+    @vote_history = VoteHistory.new(user_id: session[:id] ,song_id: @song.id)
+    @vote_history.save
+  end
+  redirect '/songs'
+end
+
+get '/users/new' do
+  @user = User.new
+  erb :'users/new'
+end
+
+post '/users' do
+  @user = User.new(
+  name: params[:name],
+  email: params[:email],
+  password: params[:password],
+  )
+  if @user.save
+    redirect "/songs"
+  else
+    erb :'users/new'
+  end
+end
 
 get '/login' do
   erb :'login'
@@ -95,17 +100,4 @@ end
 get '/logout' do
   session[:name] = nil
   erb :index
-end
-
-get '/songs/:id/upvote' do
-
-  @song = Song.find params[:id]
-
-  unless VoteHistory.find_by(user_id: session[:id],song_id: @song.id)
-    @vote_history = VoteHistory.new(user_id: session[:id] ,song_id: @song.id)
-    @vote_history.save
-
-  end
-
-  redirect '/songs'
 end

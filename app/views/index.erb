@@ -1,15 +1,13 @@
 <h1>Song Wall</h1>
-  <% if login? %>
-    <h2> <%= username %> </h2>
-    <h2><a href="/logout">Log Out</a></h2>
-  <% else %>
-    <h2><a href="/users/new">Sign Up</a></h2>
-    <h2><a href="/login">Log In</a></h2>
-  <%end%>
 
-<h3>
+
+<p>
 <a href="/songs">Check out the Song Wall</a>
-</h3>
-<h3>
-<a href="/songs/new">Share a song on the song wall</a>
-</h3>
+</p>
+<% if login? %>
+  <p>
+  <a href="/songs/new">Share a song on the song wall</a>
+  </p>
+  <% else %>
+  <p><a href="/users/new">Sign up</a> to Share a Song</p>
+<%end%>
